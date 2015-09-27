@@ -1,34 +1,29 @@
-## Put comments here that give an overall description of what your
-## functions do
-
-## Write a short comment describing this function
-
+## IM = Inverse Matrix
+## function that has internal methods for access to matrix & cache methods.
+## setIMCache must be call to set cache of Inverse Matrix
+## getIMCache must be call for get cache result.
+## the last line with list() Expose all functions that can be access.
 makeCacheMatrix <- function (x = matrix()) {
-  m <- NULL
-  set <- function (y){
+  cacheIM <- NULL
+  setMatrix <- function (y){
     x <<- y
-    m <<- NULL
+    cacheIM <<- NULL
   }
-  get <- function() x
-  setIM <- function ( inverse ) m <<- inverse
-  getIM <- function() m
-  list( set = set, get = get, setIM = setIM, getIM = getIM)
+  getMatrix <- function() x
+  setIMCache <- function ( calculatedIM ) cacheIM <<- calculatedIM
+  getIMcache <- function() cacheIM
+  list( setMatrix = setMatrix, getMatrix = getMatrix, setIMCache = setIMCache, getIMcache = getIMcache)
 }
 
-
-## Write a short comment describing this function
-
+## Get inverse matrix from cache, if was cached return the cache result,
+## else calculate the matrix inverse, set to cache and return the result.
 cacheSolve <- function(x, ...) {
-  m <- x$getIM()
-  if(!is.null(m)) {
-    message("getting cached data")
-    return(m)
+  inverseMatrix <- x$getIMcache()
+  if(!is.null(inverseMatrix)) {
+    message("Getting inverse matrix from cache")
+    return(inverseMatrix)
   }
-  data <- x$get()
-  m <- solve(m,  ...)
-  x$setIM(m)
-  m
+  inverseMatrix <- solve(x$getMatrix(), ...)
+  x$setIMCache(inverseMatrix)
+  inverseMatrix
 }
-
-m <- makeCacheMatrix(matrix(rnorm(9),3,3))
-cacheSolve(m)
